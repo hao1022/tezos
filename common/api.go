@@ -6,8 +6,10 @@ import (
 	"encoding/json"
 )
 
+//Host host
 var Host = "54.188.118.102:8732"
 
+//CurrentLevelAt func
 func CurrentLevelAt(hash string) CurrentLevelType {
 	var curr CurrentLevelType
 	route := fmt.Sprintf("/chains/main/blocks/%s/helpers/current_level", hash)
@@ -16,10 +18,12 @@ func CurrentLevelAt(hash string) CurrentLevelType {
 	return curr
 }
 
+//CurrentLevel func
 func CurrentLevel() CurrentLevelType {
 	return CurrentLevelAt("head")
 }
 
+//HeaderAt func
 func HeaderAt(hash string) BlockHeaderType {
 	var blockheader BlockHeaderType
 	route := fmt.Sprintf("/chains/main/blocks/%s/header", hash)
@@ -28,18 +32,21 @@ func HeaderAt(hash string) BlockHeaderType {
 	return blockheader
 }
 
+//Header func
 func Header() BlockHeaderType {
 	return HeaderAt("head")
 }
 
+//CycleInfo func
 func CycleInfo(hash string, cycle int) CycleInfoType {
-	var cycle_info CycleInfoType
+	var cycleInfo CycleInfoType
 	route := fmt.Sprintf("/chains/main/blocks/%s/context/raw/json/cycle/%d", hash, cycle)
 	body := Get(Host, route)
-	json.Unmarshal(body, &cycle_info)
-	return cycle_info
+	json.Unmarshal(body, &cycleInfo)
+	return cycleInfo
 }
 
+//DelegatedContracts func
 func DelegatedContracts(hash string, delegate string) []string {
 	var contracts []string
 	route := fmt.Sprintf("/chains/main/blocks/%s/context/delegates/%s/delegated_contracts", hash, delegate)
@@ -48,6 +55,7 @@ func DelegatedContracts(hash string, delegate string) []string {
 	return contracts
 }
 
+//BalanceAt func
 func BalanceAt(hash string, delegate string) string {
 	var balance string
 	route := fmt.Sprintf("/chains/main/blocks/%s/context/contracts/%s/balance", hash, delegate)
@@ -56,6 +64,7 @@ func BalanceAt(hash string, delegate string) string {
 	return balance
 }
 
+//DelegateBalanceAt func
 func DelegateBalanceAt(hash string, delegate string) string {
 	var balance string
 	route := fmt.Sprintf("/chains/main/blocks/%s/context/delegates/%s/balance", hash, delegate)
@@ -64,6 +73,7 @@ func DelegateBalanceAt(hash string, delegate string) string {
 	return balance
 }
 
+//FrozenBalanceByCycle func
 func FrozenBalanceByCycle(hash string, delegate string) []FrozenBalanceByCycleType {
 	var balance []FrozenBalanceByCycleType
 	route := fmt.Sprint("/chains/main/blocks/%s/context/delegates/%s/frozen_balance_by_cycle", hash, delegate)
@@ -72,6 +82,7 @@ func FrozenBalanceByCycle(hash string, delegate string) []FrozenBalanceByCycleTy
 	return balance
 }
 
+//StakingBalanceAt func
 func StakingBalanceAt(hash string, delegate string) string {
 	var balance string
 	route := fmt.Sprint("/chains/main/blocks/%s/context/delegates/%s/staking_balance", hash, delegate)
@@ -80,22 +91,25 @@ func StakingBalanceAt(hash string, delegate string) string {
 	return balance
 }
 
+//BakingRightsFor func
 func BakingRightsFor(hash string, delegate string, cycle int) []BakingRightType {
-	var baking_rights []BakingRightType
+	var bakingRights []BakingRightType
 	route := fmt.Sprint("/chains/main/blocks/%s/helpers/baking_rights?delegate=%s&cycle=%d", hash, delegate, cycle)
 	body := Get(Host, route)
-	json.Unmarshal(body, &baking_rights)
-	return baking_rights
+	json.Unmarshal(body, &bakingRights)
+	return bakingRights
 }
 
+//EndorsingRightsFor func
 func EndorsingRightsFor(hash string, delegate string, cycle int) []EndorsingRightType {
-	var endorsing_rights []EndorsingRightType
+	var endorsingRights []EndorsingRightType
 	route := fmt.Sprint("/chains/main/blocks/%s/helpers/endorsing_rights?delegate=%s&cycle=%d", hash, delegate, cycle)
 	body := Get(Host, route)
-	json.Unmarshal(body, &endorsing_rights)
-	return endorsing_rights
+	json.Unmarshal(body, &endorsingRights)
+	return endorsingRights
 }
 
+//Metadata func
 func Metadata(hash string) BlockMetadataType {
 	var metadata BlockMetadataType
 	route := fmt.Sprint("/chains/main/blocks/%s/metadata", hash)
@@ -104,6 +118,7 @@ func Metadata(hash string) BlockMetadataType {
 	return metadata
 }
 
+//Operations func
 func Operations(hash string) OperationType {
 	var operations OperationType
 	route := fmt.Sprint("/chains/main/blocks/%s/operations", hash)
@@ -112,6 +127,7 @@ func Operations(hash string) OperationType {
 	return operations
 }
 
+//Counter func
 func Counter(hash string, contract string) int {
 	var value string
 	route := fmt.Sprint("/chains/main/blocks/%s/context/contracts/%s/counter", hash, contract)
@@ -121,6 +137,7 @@ func Counter(hash string, contract string) int {
 	return counter
 }
 
+//RunOperation func
 func RunOperation(hash string, data string) (OperationContentsAndResultsType, error) {
 	var result OperationContentsAndResultsType
 	route := fmt.Sprint("/chains/main/blocks/%s/helpers/scripts/run_operation", head)
@@ -131,6 +148,7 @@ func RunOperation(hash string, data string) (OperationContentsAndResultsType, er
 	return result, errors.New(string(body))
 }
 
+//ForgeOperations func
 func ForgeOperations(data string) (string, error) {
 	var result string
 	route := fmt.Sprint("/chains/main/blocks/%s/helpers/forge/operations", head)
@@ -141,6 +159,7 @@ func ForgeOperations(data string) (string, error) {
 	return result, errors.New(string(body))
 }
 
+//PreapplyOperations func
 func PreapplyOperations(data string) ([]PreapplyResultType, error) {
 	var result []PreapplyResultType
 	route := fmt.Sprint("/chains/main/blocks/%s/helpers/preapply/operations", head)
@@ -151,6 +170,7 @@ func PreapplyOperations(data string) ([]PreapplyResultType, error) {
 	return result, errors.New(string(body))
 }
 
+//Injection func
 func Injection(data string) (string, error) {
 	var result string
 	route := "/injection/operation?chain=main"
